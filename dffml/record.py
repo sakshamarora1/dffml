@@ -3,6 +3,7 @@
 """
 Information on the software to evaluate is stored in a Record instance.
 """
+import os
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 
@@ -141,31 +142,72 @@ class Record(object):
         return str(self.dict())
 
     def __str__(self):
-        header = self.key
+        width = int(3 * os.get_terminal_size().columns / 4)
+        header = "\n\tKey:\t" + self.key
+        feature_header = "Record Features".center(int(width)).rstrip()
+        divider = "+" + "-" * (width) + "+"
+
         if len(self.extra.keys()):
-            header += " " + str(self.extra)
+            header += "\n\t" + str(self.extra)
 
         return "\n".join(
             [header]
+            + [feature_header]
+            + [divider]
             + [
-                ("%-30s%s" % (feature, str(results)))
+                (
+                    (
+                        "|"
+                        + feature.center(int(width / 4))
+                        + "|"
+                        + (
+                            ",".join(
+                                str(val) for val in results[: int(width / 5)]
+                            )
+                            + f",... (length:{len(results)})"
+                        ).center(int(3 * width / 4))
+                        + "|"
+                    )
+                    if isinstance(results, (list, tuple,))
+                    else (
+                        "|"
+                        + feature.center(int(width / 4))
+                        + "|"
+                        + str(results).center(int(3 * width / 4))
+                        + "|"
+                    )
+                    if isinstance(results, (str, int, float, bool,))
+                    else ""
+                )
+                + "\n"
+                + divider
                 for feature, results in self.features().items()
             ]
-            + ["Predictions"]
             + (
-                [
-                    (
-                        "%-30s\n\tvalue:%s, confidence:%s"
-                        % (
-                            pred,
-                            str(conf_val["value"]),
-                            str(conf_val["confidence"]),
-                        )
+                ["\n" + "Prediction".center(int(width)).rstrip()]
+                + [divider]
+                + [
+                    "|"
+                    + pred.center(int(width))
+                    + "|"
+                    + "\n"
+                    + divider
+                    + "\n"
+                    + "|"
+                    + ("Value:  " + str(conf_val["value"])).center(
+                        int(width / 4)
                     )
+                    + "|"
+                    + ("Confidence:   " + str(conf_val["confidence"])).center(
+                        int(3 * width / 4)
+                    )
+                    + "|"
+                    + "\n"
+                    + divider
                     for pred, conf_val in self.data.prediction.items()
                 ]
                 if self.data.prediction
-                else ["Undetermined"]
+                else ["Prediction:    Undetermined".rjust(int(width))]
             )
         ).rstrip()
 
