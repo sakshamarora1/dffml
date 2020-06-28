@@ -605,7 +605,7 @@ class MemoryInputNetworkContext(BaseInputNetworkContext):
                             operation.inputs[input_name]
                         ] + alternate_definitions
                         for definition in check_for_default_value:
-                            # Check if the definition has a default value that is not None
+                            # Check if the definition has a default value that is not _NO_DEFAULT
                             if "dffml.df.types._NO_DEFAULT" not in repr(
                                 definition.default
                             ):
@@ -619,10 +619,11 @@ class MemoryInputNetworkContext(BaseInputNetworkContext):
                                         ],
                                     )
                                 )
-                            # If there is no default value, we don't have a complete
-                            # paremeter set, so we bail out
-                            else:
-                                return
+                                break
+                        # If there is no default value, we don't have a complete
+                        # paremeter set, so we bail out
+                        else:
+                            return
         # Generate all possible permutations of applicable inputs
         # Create the parameter set for each
         products = list(
