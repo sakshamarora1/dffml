@@ -606,7 +606,10 @@ class MemoryInputNetworkContext(BaseInputNetworkContext):
                         ] + alternate_definitions
                         for definition in check_for_default_value:
                             # Check if the definition has a default value that is not None
-                            if definition.default is not NO_DEFAULT:
+                            if "dffml.df.types._NO_DEFAULT" not in repr(
+                                definition.default
+                            ):
+                                print(definition.default)
                                 gather[input_name].append(
                                     Parameter(
                                         key=input_name,
