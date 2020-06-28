@@ -609,7 +609,6 @@ class MemoryInputNetworkContext(BaseInputNetworkContext):
                             if "dffml.df.types._NO_DEFAULT" not in repr(
                                 definition.default
                             ):
-                                print(definition.default)
                                 gather[input_name].append(
                                     Parameter(
                                         key=input_name,
