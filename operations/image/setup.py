@@ -36,15 +36,11 @@ common.KWARGS["entry_points"] = {
         f"Scharr = {common.IMPORT_NAME}.operations:Scharr",
         f"equalizeHist = {common.IMPORT_NAME}.operations:equalizeHist",
         f"calcBackProject = {common.IMPORT_NAME}.operations:calcBackProject",
-        f"hog = {common.IMPORT_NAME}.operations:hog",
-        # f"CLAHE = {common.IMPORT_NAME}.operations:CLAHE",
-        # f"KAZE = {common.IMPORT_NAME}.algorithms:KAZE",
-        # f"ORB = {common.IMPORT_NAME}.algorithms:ORB",
-        # f"HOG = {common.IMPORT_NAME}.algorithms:HOG",
-        # f"BRISK = {common.IMPORT_NAME}.algorithms:BRISK",
-        # f"AKAZE = {common.IMPORT_NAME}.algorithms:AKAZE",
-        # f"SURF = {common.IMPORT_NAME}.algorithms:SURF",
-        # f"SIFT = {common.IMPORT_NAME}.algorithms:SIFT",
+        f"meanStdDev = {common.IMPORT_NAME}.operations:meanStdDev",
+        f"CLAHE = {common.IMPORT_NAME}.operations:CLAHE",
+        f"HOG = {common.IMPORT_NAME}.algorithms:HOG",
+        f"KAZE = {common.IMPORT_NAME}.algorithms:KAZE",
+        f"ORB = {common.IMPORT_NAME}.algorithms:ORB",
     ]
 }
 

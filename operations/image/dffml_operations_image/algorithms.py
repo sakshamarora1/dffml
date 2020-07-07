@@ -1,64 +1,43 @@
 from typing import List
 import cv2
 import numpy as np
+import skimage.feature
 
 from dffml.df.base import op
 
 
 @op
-async def SIFT(
+async def HOG(
     image: List[int],
-    mask: List[int] = None,
-    nfeatures: int = None,
-    nOctaveLayers: int = None,
-    contrastThreshold: float = None,
-    edgeThreshold: float = None,
-    sigma: float = None,
+    orientations: int = None,
+    pixels_per_cell: List[int] = None,
+    cells_per_block: List[int] = None,
+    block_norm: str = None,
+    visualize: bool = None,
+    transform_sqrt: bool = None,
+    feature_vector: bool = None,
+    multichannel: bool = None,
 ) -> List[int]:
     """
     """
+    if len(image.shape) == 3:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    try:
+        pixels_per_cell = tuple(pixels_per_cell)
+        cells_per_block = tuple(cells_per_block)
+    except cv2.error:
+        pass
+
     parameters = {k: v for k, v in locals().items() if v is not None}
-    parameters.pop("mask", None)
-    parameters.pop("image", None)
+    hog = skimage.feature.hog(**parameters)
 
-    sift_features = cv2.xfeatures2d.SIFT_create(**parameters)
-    keypoints = sift_features.detect(image, mask)
-    keypoints, descriptors = sift_features.compute(image, keypoints)
-    return descriptors.flatten()
-
-
-# @op
-# async def HOG(
-#     image: List[int],
-#     winSize: List[int] = None,  # (64,64)
-#     blockSize: List[int] = None,  # (16,16)
-#     blockStride: List[int] = None,  # (8,8)
-#     cellSize: List[int] = None,  # (8,8)
-#     nbins: int = None,  # 9
-#     derivAperture: int = None,  # 1
-#     winSigma: float = None,  # 4.
-#     histogramNormType: int = None,  # 0
-#     L2HysThreshold: float = None,  # 2.0000000000000001e-01
-#     gammaCorrection: int = None,  # 0
-#     nlevels: int = None,  # 64
-#     signedGradient: bool = False,
-# ) -> List[int]:
-#     """
-#     """
-#     parameters = {k: v for k, v in locals().items() if v is not None}
-#     # parameters.pop("mask", None)
-#     parameters.pop("image", None)
-
-#     hog = cv2.HOGDescriptor(**parameters)
-#     keypoints = hog.detect(image)
-#     keypoints, descriptors = hog.compute(image, keypoints)
-#     return descriptors.flatten()
+    return hog
 
 
 @op
 async def KAZE(
     image: List[int],
-    # mask: List[int] = None,
     extended: bool = None,
     upright: bool = None,
     threshold: float = None,
@@ -75,11 +54,6 @@ async def KAZE(
     keypoints = kaze_features.detect(image)
     keypoints, descriptors = kaze_features.compute(image, keypoints)
     return descriptors.flatten()
-
-
-@op
-async def SURF():
-    pass
 
 
 @op

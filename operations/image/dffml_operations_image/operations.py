@@ -2,7 +2,6 @@ from typing import List
 import cv2
 import mahotas
 import numpy as np
-import skimage.feature
 
 from dffml.df.base import op
 
@@ -127,29 +126,13 @@ async def normalize(
 
 
 @op
-async def hog(
-    image: List[int],
-    orientations: int = None,
-    pixels_per_cell: List[int] = None,
-    cells_per_block: List[int] = None,
-    block_norm: str = None,
-    visualize: bool = None,
-    transform_sqrt: bool = None,
-    feature_vector: bool = None,
-    multichannel: bool = None,
-) -> List[int]:
+async def meanStdDev(image: List[int], mask: List[int] = None) -> List[int]:
     """
     """
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    try:
-        pixels_per_cell = tuple(pixels_per_cell)
-        cells_per_block = tuple(cells_per_block)
-    except cv2.error:
-        pass
     parameters = {k: v for k, v in locals().items() if v is not None}
 
-    return skimage.feature.hog(**parameters)
+    mean, stdDev = cv2.meanStdDev(**parameters)
+    return np.concatenate([mean, stdDev]).flatten()
 
 
 @op
@@ -192,15 +175,6 @@ async def findContours(image: List[int], mode: int, method: int) -> List[int]:
     """
     image, contours, hierarchy = cv2.findContours(**locals())
     return contours  # flatten it?
-
-
-# @op
-# async def inRange(
-#     src: List[int], lowerb: "generic", upperb: "generic"
-# ) -> List[int]:
-#     """
-#     """
-#     return cv2.inRange(**locals())
 
 
 @op
@@ -257,10 +231,10 @@ async def GaussianBlur(
 
 
 @op
-async def medianBlur(src: List[int], ksize: List[int]) -> List[int]:
+async def medianBlur(src: List[int], ksize: int) -> List[int]:
     """
     """
-    return cv2.medianBlur(src, tuple(ksize))
+    return cv2.medianBlur(src, ksize)
 
 
 @op
