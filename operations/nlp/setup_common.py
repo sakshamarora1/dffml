@@ -4,14 +4,14 @@ import ast
 from pathlib import Path
 from setuptools import find_packages
 
-ORG = "aghinsa"
-NAME = "ffmpeg"
-DESCRIPTION = "DFFML operations ffmpeg"
-AUTHOR_NAME = "Aghin Shah Alin"
-AUTHOR_EMAIL = "aghinsa@gmail.com"
+ORG = "himanshu"
+NAME = "dffml-operations-nlp"
+DESCRIPTION = "DFFML operations nlp"
+AUTHOR_NAME = "0dust"
+AUTHOR_EMAIL = "himanshutripathi366@gmail.com"
 # Install dffml if it is not installed in development mode
-INSTALL_REQUIRES = [] + (
-    ["dffml>=0.3.6"]
+INSTALL_REQUIRES = ["spacy>=2.3.0"] + (
+    ["dffml>=0.3.7"]
     if not any(
         list(
             map(

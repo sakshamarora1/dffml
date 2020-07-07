@@ -11,7 +11,8 @@ spec.loader.exec_module(common)
 
 common.KWARGS["entry_points"] = {
     "dffml.operation": [
-        f"convert_to_gif = {common.IMPORT_NAME}.operations:convert_to_gif"
+        f"remove_stopwords = {common.IMPORT_NAME}.operations:remove_stopwords",
+        f"get_embedding = {common.IMPORT_NAME}.operations:get_embedding",
     ]
 }
 

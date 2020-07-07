@@ -1,22 +1,19 @@
 # Usage
-# docker build -t $USER/ffmpeg .
-# docker run --rm -ti -p 8080:8080 $USER/ffmpeg -mc-config deploy -insecure -log debug
+# docker build -t himanshu/nlp .
+# docker run --rm -ti -p 80:8080 himanshu/nlp  -insecure -log debug
 #
-# curl -v --request POST --data-binary @input.mp4 http://localhost:8080/ffmpeg -o output.gif
+# curl -v http://127.0.0.1:80/list/sources
 FROM ubuntu:20.04
 
-ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
   apt-get install -y \
     gcc \
     python3-dev \
     python3-pip \
     python3 \
-    ca-certificates \
-    ffmpeg && \
+    ca-certificates && \
   python3 -m pip install -U pip && \
   python3 -m pip install dffml-service-http && \
-  python3 -m pip install dffml-config-yaml && \
   apt-get purge -y \
     gcc \
     python3-dev && \
@@ -25,5 +22,7 @@ RUN apt-get update && \
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 
+RUN python3 -m pip install -e .
+
 ENTRYPOINT ["python3", "-m", "dffml", "service", "http", "server", "-addr", "0.0.0.0"]
-CMD ["-mc-config", "deploy"]
+CMD ["-mc-config", "nlp/deploy"]
