@@ -2,7 +2,8 @@ import sys
 import inspect
 
 import numpy as np
-from torch import utils, nn
+import torch.nn as nn
+from torch.utils.data import Dataset
 from torchvision import transforms
 
 from dffml.base import BaseDataFlowFacilitatorObject
@@ -33,7 +34,7 @@ def create_layer(layer_dict):
     return sequential_dict
 
 
-class NumpyToTensor(utils.data.Dataset):
+class NumpyToTensor(Dataset):
     def __init__(
         self,
         data,
@@ -66,7 +67,9 @@ class NumpyToTensor(utils.data.Dataset):
         return transforms.Compose(transform)(data)
 
     def __getitem__(self, index):
-        x = self.transform(self.data[index])
+        x = self.data[index]
+        if isinstance(x, np.ndarray):
+            x = self.transform(x)
 
         if self.target is not None:
             y = self.target[index]
