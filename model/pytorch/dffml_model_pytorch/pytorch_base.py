@@ -70,6 +70,8 @@ class PyTorchModelContext(ModelContext):
         if self.parent.config.classifications:
             self.cids = self._mkcids(self.parent.config.classifications)
             self.classifications = self._classifications(self.cids)
+        else:
+            self.classifications = None
         self.features = self._applicable_features()
         self.model_path = self._model_path()
         self._model = None
@@ -348,8 +350,8 @@ class PyTorchModelContext(ModelContext):
             running_corrects = 0
 
             for inputs, labels in dataloader:
-                inputs = inputs.to(inputs)
-                labels = labels.to(inputs)
+                inputs = inputs.to(self.device)
+                labels = labels.to(self.device)
 
                 with torch.set_grad_enabled(False):
                     outputs = self._model(inputs)
