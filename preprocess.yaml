@@ -1,0 +1,86 @@
+definitions:
+  convert_color.inputs.code:
+    name: convert_color.inputs.code
+    primitive: str
+  convert_color.inputs.src:
+    name: convert_color.inputs.src
+    primitive: array
+  convert_color.outputs.result:
+    name: convert_color.outputs.result
+    primitive: array
+  get_single_output:
+    name: get_single_output
+    primitive: map
+  get_single_spec:
+    name: get_single_spec
+    primitive: array
+  operations:get_ab_channel.inputs.src:
+    name: operations:get_ab_channel.inputs.src
+    primitive: array
+  operations:get_ab_channel.outputs.result:
+    name: operations:get_ab_channel.outputs.result
+    primitive: array
+  operations:get_l_channel.inputs.src:
+    name: operations:get_l_channel.inputs.src
+    primitive: array
+  operations:get_l_channel.outputs.result:
+    name: operations:get_l_channel.outputs.result
+    primitive: array
+flow:
+  convert_color:
+    inputs:
+      code:
+      - seed
+      src:
+      - seed:
+        - image
+  get_single:
+    inputs:
+      spec:
+      - seed
+  operations:get_ab_channel:
+    inputs:
+      src:
+      - convert_color: result
+  operations:get_l_channel:
+    inputs:
+      src:
+      - convert_color: result
+linked: true
+operations:
+  convert_color:
+    inputs:
+      code: convert_color.inputs.code
+      src: convert_color.inputs.src
+    name: convert_color
+    outputs:
+      result: convert_color.outputs.result
+    stage: processing
+  get_single:
+    inputs:
+      spec: get_single_spec
+    name: get_single
+    outputs:
+      output: get_single_output
+    stage: output
+  operations:get_ab_channel:
+    inputs:
+      src: operations:get_ab_channel.inputs.src
+    name: operations:get_ab_channel
+    outputs:
+      result: operations:get_ab_channel.outputs.result
+    stage: processing
+  operations:get_l_channel:
+    inputs:
+      src: operations:get_l_channel.inputs.src
+    name: operations:get_l_channel
+    outputs:
+      result: operations:get_l_channel.outputs.result
+    stage: processing
+seed:
+- definition: convert_color.inputs.code
+  value: BGR2LAB
+- definition: get_single_spec
+  value:
+  - l_channel: operations:get_l_channel.outputs.result
+  - ab_channel: operations:get_ab_channel.outputs.result

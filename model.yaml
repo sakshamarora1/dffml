@@ -1,0 +1,138 @@
+model:
+  conv11:
+    name: Conv2d
+    in_channels: 1
+    out_channels: 64
+    kernel_size: 3
+    padding: 1
+    stride: 2
+  conv12:
+    name: Conv2d
+    in_channels: 64
+    out_channels: 128
+    kernel_size: 3
+    padding: 1
+  conv13:
+    name: Conv2d
+    in_channels: 128
+    out_channels: 128
+    kernel_size: 3
+    padding: 1
+    stride: 2
+  conv14:
+    name: Conv2d
+    in_channels: 128
+    out_channels: 256
+    kernel_size: 3
+    padding: 1
+  conv15:
+    name: Conv2d
+    in_channels: 256
+    out_channels: 256
+    kernel_size: 3
+    padding: 1
+    stride: 2
+  conv16:
+    name: Conv2d
+    in_channels: 256
+    out_channels: 512
+    kernel_size: 3
+    padding: 1
+  conv17:
+    name: Conv2d
+    in_channels: 512
+    out_channels: 512
+    kernel_size: 3
+    padding: 1
+  conv18:
+    name: Conv2d
+    in_channels: 512
+    out_channels: 256
+    kernel_size: 3
+    padding: 1
+  conv21:
+    name: Conv2d
+    in_channels: 256
+    out_channels: 128
+    kernel_size: 3
+    padding: 1
+  conv23:
+    name: Conv2d
+    in_channels: 128
+    out_channels: 64
+    kernel_size: 3
+    padding: 1
+  conv25:
+    name: Conv2d
+    in_channels: 64
+    out_channels: 32
+    kernel_size: 3
+    padding: 1
+  conv26:
+    name: Conv2d
+    in_channels: 32
+    out_channels: 16
+    kernel_size: 3
+    padding: 1
+  conv27:
+    name: Conv2d
+    in_channels: 16
+    out_channels: 2
+    kernel_size: 3
+    padding: 1
+  upsample:
+    name: Upsample
+    scale_factor: 2
+  relu:
+    name: ReLU
+  tanh:
+    name: Tanh
+forward:
+  model:
+    # Encoder
+    # layer 1
+    - conv11
+    - relu
+    # layer 2
+    - conv12
+    - relu
+    # layer 3
+    - conv13
+    - relu
+    # layer 4
+    - conv14
+    - relu
+    # layer 5
+    - conv15
+    - relu
+    # layer 6
+    - conv16
+    - relu
+    # layer 7
+    - conv17
+    - relu
+    # layer 8
+    - conv18
+    - relu
+    # Decoder
+    # layer 1
+    - conv21
+    - relu
+    # layer 2
+    - upsample
+    # layer 3
+    - conv23
+    - relu
+    # layer 4
+    - upsample
+    # layer 5
+    - conv25
+    - relu
+    # layer 6
+    - conv26
+    - relu
+    # layer 7
+    - conv27
+    - tanh
+    # layer 8
+    - upsample
